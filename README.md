@@ -1,8 +1,8 @@
-# One-click deploy your own person hubot with slack integration to Azure
+# One-click deploy your own personal hubot with slack integration to Azure
 
 ## Introduction
 
-This project allows you to deploy your own personalal [hubot](https://hubot.github.com/) to azure with slack  integration already configured. The 'Deploy to Azure will create a web App to host hubot and a storage account where hubot's brain will be persisted. 
+This project allows you to deploy your own personal [hubot](https://hubot.github.com/) to azure with slack  integration already configured. The 'Deploy to Azure will create a web App to host hubot and a storage account where hubot's brain will be persisted. 
 
 ## Instructions
 
