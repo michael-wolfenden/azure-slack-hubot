@@ -34,7 +34,8 @@ Below are the parameters that the template expects
             <td>location</td>
             <td>string</td>
             <td>
-                The location to use for creating the web app, hosting plan and storage account
+                The location to use for creating the web app, hosting plan and storage account<br/>
+                NOTE: Unfortunately the latest version of storage accounts are not avaliable in the Australian data centres yet.
                 <ul>
                     <li>Central US</li>
                     <li>East Asia</li>
@@ -50,7 +51,7 @@ Below are the parameters that the template expects
                     <li>West US</li>
                 </ul> 
 				<br/><br/
-				Unfortunately the latest version of storage accounts are not avaliable in the Australian data centres yet.
+				
             </td>
         </tr>
         <tr>
@@ -84,8 +85,8 @@ Below are the parameters that the template expects
             <td>
 				Enable or disable always on. If you choose free or shared for the sku, this should be set to false as it is not supported
 				<ul>
-					<li>true</li>
-					<li>false</li>
+					<li>True</li>
+					<li>False</li>
 				</ul>
 			</td>
         </tr>
@@ -116,9 +117,11 @@ Below are the parameters that the template expects
 
 ## Usage
 
-Once deployment is complete, you should be able to access `https://<name-of-your-site>.azurewebsites.net/hubot/help` and see the list of commands available in Hubot.
+NOTE: `<name-of-your-hubot>` is the hubot name you configured in the slack integration
 
-In you slack channel you should also be able to `@<name-of-your-hubot>: help` to also see the list of available commands (for example `@hutbot:help`)
+Once deployment is complete, you should be able to access `https://<name-of-your-site>.azurewebsites.net/<name-of-your-hubot>/help` and see the list of commands available in Hubot.
+
+In you slack channel you should also be able to `<name-of-your-hubot> help` to also see the list of available commands (for example `hutbot help`)
 
 ## Adding additonal hubot scripts
 
@@ -126,4 +129,4 @@ See https://hubot.github.com/docs/#scripts for instructions on adding additional
 
 Unfortunately [Slingshot](https://github.com/projectkudu/slingshot) (the project that implements the Deploy To Azure button) does not currently support continuous deployment (see [https://github.com/projectkudu/slingshot/issues/21](https://github.com/projectkudu/slingshot/issues/21)). This means that changes to your repository are not automatically deployed. 
 
-Instead, once you have pushed your changes to your repository, you have to manually sync via the portal. If you go the web app blade, you will see a 'deployment' tile. Clicking on this will bring up a new blade with a 'Sync' button. Clicking on the 'Sync' button will pull the latest changes from your repository.
+Instead, once you have pushed your changes to your repository, you have to manually sync via the portal. If you go the web app blade, you will see a 'deployment' tile. Clicking on this will bring up a new blade with a 'Sync' button. Clicking on the 'Sync' button will pull the latest changes from your repository. When complete, click 'Restart' to restart your web app to see the new scripts.
