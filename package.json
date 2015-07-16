@@ -6,6 +6,7 @@
   "description": "A simple helpful robot for your Company",
   "dependencies": {
     "hubot": "^2.13.2",
+    "hubot-azure-scripts": "^0.1.6",
     "hubot-diagnostics": "0.0.1",
     "hubot-google-images": "^0.1.5",
     "hubot-google-translate": "^0.2.0",

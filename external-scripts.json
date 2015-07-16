@@ -6,5 +6,6 @@
   "hubot-pugme",
   "hubot-maps",
   "hubot-rules",
-  "hubot-shipit"
+  "hubot-shipit",
+  "hubot-azure-scripts/brain/storage-blob-brain"
 ]
