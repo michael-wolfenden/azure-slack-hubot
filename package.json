@@ -5,6 +5,7 @@
   "author": "-",
   "description": "A simple helpful robot for your Company",
   "dependencies": {
+    "coffee-script": "^1.9.3",
     "hubot": "^2.13.2",
     "hubot-azure-scripts": "^0.1.6",
     "hubot-diagnostics": "0.0.1",
