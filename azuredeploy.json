@@ -1,0 +1,189 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "siteName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the web app that will host hubot"
+      }
+    },
+    "hostingPlanName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the app service plan to use for hosting the web app"
+      }
+    },
+    "location": {
+      "type": "string",
+      "allowedValues": [
+        "Central US",
+        "East Asia",
+        "East US",
+        "East US 2",
+        "Japan East",
+        "Japan West",
+        "North Central US",
+        "North Europe",
+        "South Central US",
+        "Southeast Asia",
+        "West Europe",
+        "West US"
+      ],
+      "metadata": {
+        "description": "The location to use for creating the web app, hosting plan and storage account"
+      }
+    },
+    "sku": {
+      "type": "string",
+      "allowedValues": [
+        "Free",
+        "Shared",
+        "Basic",
+        "Standard"
+      ],
+      "defaultValue": "Free",
+      "metadata": {
+        "description": "The pricing tier for the hosting plan (free, shared, basic, standard)"
+      }
+    },
+    "workerSize": {
+      "type": "string",
+      "allowedValues": [
+        "0",
+        "1",
+        "2"
+      ],
+      "defaultValue": "0",
+      "metadata": {
+        "description": "The instance size of the hosting plan (small, medium, or large)"
+      }
+    },
+    "enableAlwaysOn": {
+      "type": "string",
+      "allowedValues": [
+        "True",
+        "False"
+      ],
+      "metadata": {
+        "description": "Enable or disable always on. If you choose free or shared for the sku, this should be set to false as it is not supported"
+      }
+    },
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the storage account that will host hubot's brain"
+      }
+    },
+    "storageAccountType": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_ZRS"
+      ],
+      "metadata": {
+        "description": "The type of storage account (locally-redundant storage, geo-redundant storage, zone-redundant storage)"
+      },
+      "defaultValue": "Standard_LRS"
+    },
+    "slackApiToken": {
+      "type": "string",
+      "metadata": {
+        "description": "The hubot API token from Slack"
+      }
+    },
+    "repoUrl": {
+      "type": "string"
+    },
+    "branch": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "location": "[parameters('location')]",
+    "siteName": "[parameters('siteName')]",
+    "hostingPlanName": "[parameters('hostingPlanName')]",
+    "sku": "[parameters('sku')]",
+    "workerSize": "[parameters('workerSize')]",
+    "enableAlwaysOn": "[parameters('enableAlwaysOn')]",
+    "storageAccountName": "[parameters('storageAccountName')]",
+    "storageAccountType": "[parameters('storageAccountType')]",
+    "slackApiToken": "[parameters('slackApiToken')]",
+    "repoUrl": "[parameters('repoUrl')]",
+    "branch": "[parameters('branch')]"
+  },
+  "resources": [{
+    "type": "Microsoft.Storage/storageAccounts",
+    "name": "[variables('storageAccountName')]",
+    "apiVersion": "2015-05-01-preview",
+    "location": "[variables('location')]",
+    "properties": {
+      "accountType": "[variables('storageAccountType')]"
+    }
+  }, {
+    "apiVersion": "2014-11-01",
+    "name": "[variables('hostingPlanName')]",
+    "type": "Microsoft.Web/serverfarms",
+    "location": "[variables('location')]",
+    "properties": {
+      "name": "[variables('hostingPlanName')]",
+      "sku": "[variables('sku')]",
+      "workerSize": "[variables('workerSize')]",
+      "numberOfWorkers": 1
+    }
+  }, {
+    "apiVersion": "2014-11-01",
+    "name": "[variables('siteName')]",
+    "type": "Microsoft.Web/sites",
+    "location": "[variables('location')]",
+    "dependsOn": [
+      "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+      "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+    ],
+    "properties": {
+      "serverFarm": "[variables('hostingPlanName')]"
+    },
+    "resources": [{
+      "apiVersion": "2014-11-01",
+      "name": "web",
+      "type": "config",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/Sites', variables('siteName'))]"
+      ],
+      "properties": {
+        "alwaysOn": "[variables('enableAlwaysOn')]",
+        "requestTracingEnabled": true,
+        "httpLoggingEnabled": true,
+        "logsDirectorySizeLimit": 40,
+        "detailedErrorLoggingEnabled": true
+      }
+    }, {
+      "apiVersion": "2014-11-01",
+      "name": "appsettings",
+      "type": "config",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/Sites', variables('siteName'))]"
+      ],
+      "properties": {
+        "HUBOT_BRAIN_AZURE_STORAGE_ACCOUNT": "[variables('storageAccountName')]",
+        "HUBOT_BRAIN_AZURE_STORAGE_ACCESS_KEY": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2015-05-01-preview').key1]",
+        "HUBOT_SLACK_TOKEN": "[variables('slackApiToken')]",
+        "HUBOT_ADAPTER": "slack"
+      }
+    }, {
+      "apiVersion": "2014-04-01",
+      "name": "web",
+      "type": "sourcecontrols",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/Sites', variables('siteName'))]",
+        "[concat('Microsoft.Web/Sites/', variables('siteName'), '/config/appsettings')]"
+      ],
+      "properties": {
+        "RepoUrl": "[variables('repoUrl')]",
+        "branch": "[variables('branch')]",
+        "IsManualIntegration": true
+      }
+    }]
+  }]
+}
