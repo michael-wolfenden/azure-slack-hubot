@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This project allows you to deploy your own personal [hubot](https://hubot.github.com/) to azure with slack  integration already configured. The 'Deploy to Azure will create a web App to host hubot and a storage account where hubot's brain will be persisted. 
+This project allows you to deploy your own personal [hubot](https://hubot.github.com/) to azure with slack  integration already configured. The 'Deploy to Azure will create a web App to host hubot and a storage account where hubot's brain will be persisted.
 
 ## Instructions
 
@@ -35,8 +35,10 @@ Below are the parameters that the template expects
             <td>string</td>
             <td>
                 The location to use for creating the web app, hosting plan and storage account<br/>
-                NOTE: Unfortunately the latest version of storage accounts are not avaliable in the Australian data centres yet.
                 <ul>
+                    <li>Australia East</li>
+                    <li>Australia Southeast</li>
+                    <li>Brazil South</li>
                     <li>Central US</li>
                     <li>East Asia</li>
                     <li>East US</li>
@@ -49,9 +51,9 @@ Below are the parameters that the template expects
                     <li>Southeast Asia</li>
                     <li>West Europe</li>
                     <li>West US</li>
-                </ul> 
+                </ul>
 				<br/><br/
-				
+
             </td>
         </tr>
         <tr>
@@ -125,8 +127,8 @@ In you slack channel you should also be able to `<name-of-your-hubot> help` to a
 
 ## Adding additonal hubot scripts
 
-See https://hubot.github.com/docs/#scripts for instructions on adding additional script. 
+See https://hubot.github.com/docs/#scripts for instructions on adding additional script.
 
-Unfortunately [Slingshot](https://github.com/projectkudu/slingshot) (the project that implements the Deploy To Azure button) does not currently support continuous deployment (see [https://github.com/projectkudu/slingshot/issues/21](https://github.com/projectkudu/slingshot/issues/21)). This means that changes to your repository are not automatically deployed. 
+Unfortunately [Slingshot](https://github.com/projectkudu/slingshot) (the project that implements the Deploy To Azure button) does not currently support continuous deployment (see [https://github.com/projectkudu/slingshot/issues/21](https://github.com/projectkudu/slingshot/issues/21)). This means that changes to your repository are not automatically deployed.
 
 Instead, once you have pushed your changes to your repository, you have to manually sync via the portal. If you go the web app blade, you will see a 'deployment' tile. Clicking on this will bring up a new blade with a 'Sync' button. Clicking on the 'Sync' button will pull the latest changes from your repository. When complete, click 'Restart' to restart your web app to see the new scripts.

@@ -17,6 +17,9 @@
     "location": {
       "type": "string",
       "allowedValues": [
+        "Australia East",
+        "Australia Southeast",
+        "Brazil South",
         "Central US",
         "East Asia",
         "East US",
